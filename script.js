@@ -19,32 +19,52 @@ function showSuccess(input) {
     formControl.className = 'form-control success';
 }
 
+// Check Username
+function checkUsername(username) {
+    if (username.value.trim() === "") {
+        showError(username, "Username is required");
+    } else {
+        checkLength(username, 3, 15);
+    }
+}
+
 // Check Email is Valid
 function checkEmail(input) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (re.test(input.value.trim())) {
         showSuccess(input);
+    } else if (email.value.trim() === "") {
+        showError(input, "Email is required");
     } else {
         showError(input, "Email is not valid");
     }
 }
 
-// Check Required Fields
-function checkRequired(inputArr) {
-    inputArr.forEach(function (input) {
-        if (input.value.trim() === "") {
-            showError(input, `${getFieldName(input)} is required`);
-        } else {
-            showSuccess(input);
-        }
-    })
+// Check Password
+function checkPassword(password) {
+    if (password.value === "") {
+        showError(password, "Password is required");
+    } else {
+        checkLength(password, 6, 25);
+    }
+}
+
+// Check Confirm Password
+function checkPassword2(password2) {
+    if (password2.value === "") {
+        showError(password2, "Password confirmation is required");
+    } else {
+        checkPasswordsMatch(password, password2);
+    }
 }
 
 // Check Passwords Match
 function checkPasswordsMatch(input1, input2) {
     if (input1.value !== input2.value) {
         showError(input2, "Passwords do not match");
+    } else {
+        showSuccess(input2);
     }
 }
 
@@ -68,11 +88,8 @@ function checkLength(input, min, max) {
 form.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    checkRequired([username, email, password, password2]);
-
-    checkLength(username, 3, 15);
-    checkLength(password, 6, 25);
+    checkUsername(username);
     checkEmail(email);
-    checkPasswordsMatch(password, password2);
-
+    checkPassword(password);
+    checkPassword2(password2);
 })
